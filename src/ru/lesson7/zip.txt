@@ -1,0 +1,51 @@
+// ZipOutputStream
+        // ZipInputStream
+
+        String path = "test.txt";
+        String zipPath = "test.zip";
+
+       try(ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath));
+            FileInputStream fins = new FileInputStream(path)) {
+
+            ZipEntry zipEntry = new ZipEntry(path);
+            zos.putNextEntry(zipEntry);
+
+            byte[] buffer = new byte[fins.available()];
+            fins.read(buffer);
+
+            zos.write(buffer);
+            zos.closeEntry();
+
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipPath))) {
+            ZipEntry zipEntry;
+            String name;
+            long size;
+
+            while ((zipEntry = zis.getNextEntry()) != null) {
+                name = zipEntry.getName();
+                size = zipEntry.getSize();
+                System.out.println("File name: " + name + " | File size: " + size);
+
+                FileOutputStream fos = new FileOutputStream("new\\" + name);
+
+                int bytes;
+                while ((bytes = zis.read()) != -1) {
+                    fos.write(bytes);
+                }
+
+                for (int c = zis.read(); c != -1; c = zis.read()) {  //альтернатива while
+                    fos.write(c);
+                }
+
+                fos.flush();
+                zis.close();
+                fos.close();
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }

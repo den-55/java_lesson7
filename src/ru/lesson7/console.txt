@@ -1,0 +1,10 @@
+Console console = System.console();
+
+        if(console != null) {
+            String name = console.readLine("Введите имя: ");
+            String age = console.readLine("Введите возраст: ");
+            char[] userPassword = console.readPassword("ВВедите пароль: ");
+
+            console.printf("Вы ввели имя пользователя: %s, \n" +
+                    "Возраст: %s  и пароль: %s", name, age, new String(userPassword));
+        }
